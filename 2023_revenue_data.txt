@@ -1,0 +1,55 @@
+# FILE FORMAT INFORMATION
+# Each line in this file should be either blank, a comment line 
+# denoted by the '#' as the first character, or a key value pair.
+# A key cannot contain spaces, and underscores are recommended
+# A value should represent an integer or floating point value 
+# Units of values should be specified in comments if ambiguous
+
+acres_corn                  4226
+# Note: acres_soy includes wheat/dc soy acres
+acres_soy                   3727
+acres_wheat_dc_soy           408
+
+# yields in bu/acre
+proj_yield_farm_corn         223.4
+proj_yield_farm_full_soy      72.8
+proj_yield_farm_dc_soy        49.3 
+proj_yield_cty_corn          204.4
+proj_yield_cty_soy            61.0	
+# wheat yield is not used by the application, but provided for reference
+proj_yield_farm_wheat         88.4
+
+contract_bu_corn          600000
+contract_bu_soy           260000
+
+# deducts and shrink are percents
+est_shrink_corn                0.75
+est_shrink_soy                 0.75
+est_deduct_corn                0.5 
+est_deduct_soy                 0.5 
+
+# revenue, contract prices, basis, pmts in dollars
+
+revenue_wheat             300000
+
+# contract price includes basis
+avg_contract_price_corn        6.30
+avg_contract_price_soy        13.78
+
+fall_futures_price_corn        5.99
+fall_futures_price_soy        13.93
+
+est_basis_corn                 0.35
+est_basis_soy                  0.35
+
+# government program payments intentionally excluded
+ppp_loan_forgive_corn		       0
+ppp_loan_forgive_soy           0
+mfp_cfap_corn						       0
+mfp_cfap_soy						       0
+
+rental_revenue_corn        86000
+rental_revenue_soy         76000
+
+other_revenue_corn         16000
+other_revenue_soy	         14000
