@@ -22,10 +22,12 @@ At this point only the revenue component is complete (but untested).  The other 
 In Python console or ipython console:
 
 To see the revenue sensitivity table for 2023:
+
 `from sensitivity import sens_revenue`
 `sens_revenue(2023)`
 
-To compute a single cell of the table (or test arbitrary factors): 
+To compute a single cell of the table (or test arbitrary factors):
+
 `from revenue import Revenue`
 `r = Revenue(2023)`
 `r.total_revenue(price_factor=.95, yield_factor=1.05)`
