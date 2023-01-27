@@ -26,26 +26,27 @@ class Revenue(object):
     """
 
     def __init__(self, crop_year):
+        """
+        Get an instance for the given crop year, then get a list of
+        key/value pairs from the text file and make object attributes from it.
+        """
+        self.crop_year = crop_year
+        for k, v in self.load_for_crop_year():
+            setattr(self, k, float(v) if '.' in v else int(v))
 
-        # Get a dict with the textfile key/value data
-        # and make object attributes from it.
-        for k, v in self.load_for_crop_year(crop_year).items():
-            setattr(self, k, v)
-
-    def load_for_crop_year(self, crop_year):
+    def load_for_crop_year(self):
         """
         Load individual revenue items from data file
         ignoring lines that begin with '#' and blank lines
-        return a dict with all the key/value information
+        return a list with all the key/value pairs
         """
-        with open(f'{crop_year}_revenue_data.txt') as f:
+        with open(f'{self.crop_year}_revenue_data.txt') as f:
             contents = f.read()
 
         lines = filter(lambda line: line and line[0] != '#',
                        contents.strip().split('\n'))
 
-        items = [line.strip().split() for line in lines]
-        return {k: float(v) if '.' in v else int(v) for k, v in items}
+        return [line.strip().split() for line in lines]
 
     def deliverable_bu_corn(self, yield_factor=1):
         """
