@@ -4,7 +4,7 @@ A tool for midwest grain farmers to help evaluate farm payment and crop insuranc
 
 The current implementation is just beginning development with a goal of verifying this Python codebase against Kelley's benchmarking.xlsx Excel workbook.  Once the logic has been validated, the plan is to build a publicly available web application, possibly in Django.  Having registered to use this application, a farmer could enter/upload his or her farm-specific data and select options for farm plan and crop insurance to maximize cash flow while minimizing risk.
 
-At this point only the revenue component is complete (and still untested).  The other four components will be built and tested shortly.
+At this point only the revenue component is complete (now tested).  The other four components (cost, gov_pmt, net_indemnity and cash_flow will be built and tested shortly.
 
 ## Prerequisites 
 
