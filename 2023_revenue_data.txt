@@ -5,17 +5,15 @@
 # A value should represent an integer or floating point value 
 # Units of values should be specified in comments if ambiguous
 
-acres_corn                  4226
+acres_corn                  4225.5
 # Note: acres_soy includes wheat/dc soy acres
-acres_soy                   3727
-acres_wheat_dc_soy           408
+acres_soy                   3727.1
+acres_wheat_dc_soy           407.6
 
 # yields in bu/acre
 proj_yield_farm_corn         223.4
 proj_yield_farm_full_soy      72.8
 proj_yield_farm_dc_soy        49.3 
-proj_yield_cty_corn          204.4
-proj_yield_cty_soy            61.0	
 # wheat yield is not used by the application, but provided for reference
 proj_yield_farm_wheat         88.4
 
@@ -30,14 +28,14 @@ est_deduct_soy                 0.5
 
 # revenue, contract prices, basis, pmts in dollars
 
-revenue_wheat             300000
+revenue_wheat             299572
 
-# contract price includes basis
-avg_contract_price_corn        6.30
-avg_contract_price_soy        13.78
+# contract price includes basis (need these to 6 decimal places for exact comparison)
+avg_contract_price_corn        6.297083
+avg_contract_price_soy        13.777115
 
-fall_futures_price_corn        5.99
-fall_futures_price_soy        13.93
+fall_futures_price_corn        5.9850
+fall_futures_price_soy        13.9300
 
 est_basis_corn                 0.35
 est_basis_soy                  0.35
@@ -48,8 +46,8 @@ ppp_loan_forgive_soy           0
 mfp_cfap_corn						       0
 mfp_cfap_soy						       0
 
-rental_revenue_corn        86000
-rental_revenue_soy         76000
+rental_revenue_corn        85952
+rental_revenue_soy         75814
 
-other_revenue_corn         16000
-other_revenue_soy	         14000
+other_revenue_corn         16231
+other_revenue_soy	         14316
