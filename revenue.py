@@ -24,13 +24,19 @@ class Revenue(object):
       print(r.total_revenue(.9, 1.1) # specifies both price and yield factors
       print(r.total_revenue(yield_factor=1.2) # uses default for price_factor
     """
+
     def __init__(self, crop_year):
-        self.items = self.load_for_crop_year(crop_year)
+
+        # Get a dict with the textfile key/value data
+        # and make object attributes from it.
+        for k, v in self.load_for_crop_year(crop_year).items():
+            setattr(self, k, v)
 
     def load_for_crop_year(self, crop_year):
         """
         Load individual revenue items from data file
         ignoring lines that begin with '#' and blank lines
+        return a dict with all the key/value information
         """
         with open(f'{crop_year}_revenue_data.txt') as f:
             contents = f.read()
@@ -43,11 +49,11 @@ class Revenue(object):
 
     def deliverable_bu_corn(self, yield_factor=1):
         """
-        estimated corn bushels with shrink and yield factor applied
+        Estimated corn bushels with shrink and yield factor applied
         """
-        ret = (self.items['acres_corn'] *
-               self.items['proj_yield_farm_corn'] *
-               (1 - self.items['est_shrink_corn']/100.) * yield_factor)
+        ret = (self.acres_corn *
+               self.proj_yield_farm_corn *
+               (1 - self.est_shrink_corn/100.) * yield_factor)
         # print('deliverable_bu_corn', ret)
         return ret
 
@@ -56,20 +62,20 @@ class Revenue(object):
         Compute estimated raw total soy bushels
         considering wheat/dc soy acres
         """
-        ret = (self.items['acres_wheat_dc_soy'] *
-               self.items['proj_yield_farm_dc_soy'] +
-               (self.items['acres_soy'] -
-               self.items['acres_wheat_dc_soy']) *
-               self.items['proj_yield_farm_full_soy'])
+        ret = (self.acres_wheat_dc_soy *
+               self.proj_yield_farm_dc_soy +
+               (self.acres_soy -
+                self.acres_wheat_dc_soy) *
+               self.proj_yield_farm_full_soy)
         # print('estimated_soy_bushels', ret)
         return ret
 
     def deliverable_bu_soy(self, yield_factor=1):
         """
-        estimated soy bushels with shrink and yield factor applied
+        Estimated soy bushels with shrink and yield factor applied
         """
         ret = (self.estimated_soy_bushels() *
-               (1 - self.items['est_shrink_soy']/100.) * yield_factor)
+               (1 - self.est_shrink_soy/100.) * yield_factor)
         # print('deliverable_bu_soy', ret)
         return ret
 
@@ -84,10 +90,10 @@ class Revenue(object):
         ret = round(
             ((self.deliverable_bu_corn(yield_factor) if crop == 'corn' else
               self.deliverable_bu_soy(yield_factor)) -
-             self.items[f'contract_bu_{crop}']) *
-            (self.items[f'fall_futures_price_{crop}'] * price_factor +
-             self.items[f'est_basis_{crop}']) *
-            (1 - self.items[f'est_deduct_{crop}']/100.))
+             getattr(self, f'contract_bu_{crop}')) *
+            (getattr(self, f'fall_futures_price_{crop}') * price_factor +
+             getattr(self, f'est_basis_{crop}')) *
+            (1 - getattr(self, f'est_deduct_{crop}')/100.))
         # print("revenue_uncontracted_crop", crop, ret)
         return ret
 
@@ -110,9 +116,9 @@ class Revenue(object):
             raise ValueError("crop must be 'corn' or 'soy'")
 
         ret = round(
-            self.items[f'contract_bu_{crop}'] *
-            self.items[f'avg_contract_price_{crop}'] *
-            (1 - self.items[f'est_deduct_{crop}']/100.) *
+            getattr(self, f'contract_bu_{crop}') *
+            getattr(self, f'avg_contract_price_{crop}') *
+            (1 - getattr(self, f'est_deduct_{crop}')/100.) *
             price_factor)
         # print('revenue_contracted_crop', crop, ret)
         return ret
@@ -133,7 +139,7 @@ class Revenue(object):
         """
         if crop not in ['corn', 'soy', 'wheat']:
             raise ValueError("crop must be 'corn', 'soy' or 'wheat'")
-        ret = (self.items['revenue_wheat'] if crop == 'wheat' else
+        ret = (self.revenue_wheat if crop == 'wheat' else
                self.revenue_contracted_crop(crop, price_factor) +
                self.revenue_uncontracted_crop(
                    crop, price_factor, yield_factor))
@@ -144,10 +150,10 @@ class Revenue(object):
         """
         Total of other revenue *excluding* government program payments
         """
-        ret = sum([self.items[f'ppp_loan_forgive_{crop}'] +
-                   self.items[f'mfp_cfap_{crop}'] +
-                   self.items[f'rental_revenue_{crop}'] +
-                   self.items[f'other_revenue_{crop}']
+        ret = sum([getattr(self, f'ppp_loan_forgive_{crop}') +
+                   getattr(self, f'mfp_cfap_{crop}') +
+                   getattr(self, f'rental_revenue_{crop}') +
+                   getattr(self, f'other_revenue_{crop}')
                    for crop in ['corn', 'soy']])
         # print('total_revenue_other', ret)
         return ret
@@ -156,7 +162,7 @@ class Revenue(object):
         """
         Total revenue reflecting current estimates and price/yield factors
         """
-        return sum([self.revenue_uncontracted(price_factor, yield_factor),
+        return sum([self.revenue_wheat,
+                    self.revenue_uncontracted(price_factor, yield_factor),
                     self.revenue_contracted(price_factor),
-                    self.items['revenue_wheat'],
                     self.total_revenue_other()])
