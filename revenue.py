@@ -71,6 +71,12 @@ class Revenue(object):
         # print('estimated_soy_bushels', ret)
         return ret
 
+    def projected_yield_soy(self):
+        """
+        Convenience method providing estimated overall soy yield
+        """
+        return self.estimated_soy_bushels() / self.acres_soy
+
     def deliverable_bu_soy(self, yield_factor=1):
         """
         Estimated soy bushels with shrink and yield factor applied
