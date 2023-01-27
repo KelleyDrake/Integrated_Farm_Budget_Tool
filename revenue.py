@@ -115,7 +115,7 @@ class Revenue(object):
         # print('revenue_uncontracted', ret)
         return ret
 
-    def revenue_contracted_crop(self, crop, price_factor=1):
+    def revenue_contracted_crop(self, crop):
         """
         Expected revenue from contracted corn or soy rounded to whole dollars
         """
@@ -125,8 +125,7 @@ class Revenue(object):
         ret = round(
             getattr(self, f'contract_bu_{crop}') *
             getattr(self, f'avg_contract_price_{crop}') *
-            (1 - getattr(self, f'est_deduct_{crop}')/100.) *
-            price_factor)
+            (1 - getattr(self, f'est_deduct_{crop}')/100.))
         # print('revenue_contracted_crop', crop, ret)
         return ret
 
@@ -134,7 +133,7 @@ class Revenue(object):
         """
         Expected revenue from contracted grain in whole dollars
         """
-        ret = sum([self.revenue_contracted_crop(crop, price_factor)
+        ret = sum([self.revenue_contracted_crop(crop)
                   for crop in ['corn', 'soy']])
         # print('revenue_contracted', ret)
         return ret
@@ -147,11 +146,19 @@ class Revenue(object):
         if crop not in ['corn', 'soy', 'wheat']:
             raise ValueError("crop must be 'corn', 'soy' or 'wheat'")
         ret = (self.revenue_wheat if crop == 'wheat' else
-               self.revenue_contracted_crop(crop, price_factor) +
+               self.revenue_contracted_crop(crop) +
                self.revenue_uncontracted_crop(
                    crop, price_factor, yield_factor))
         # print('total_revenue_crop', crop, ret)
         return ret
+
+    def total_revenue_grain(self, price_factor=1, yield_factor=1):
+        """
+        Convenience method providing total grain revenue for the crop year
+        based on price and yield factors
+        """
+        return sum([self.total_revenue_crop(crop, price_factor, yield_factor)
+                    for crop in ['corn', 'soy', 'wheat']])
 
     def total_revenue_other(self):
         """
@@ -171,5 +178,5 @@ class Revenue(object):
         """
         return sum([self.revenue_wheat,
                     self.revenue_uncontracted(price_factor, yield_factor),
-                    self.revenue_contracted(price_factor),
+                    self.revenue_contracted(),
                     self.total_revenue_other()])
