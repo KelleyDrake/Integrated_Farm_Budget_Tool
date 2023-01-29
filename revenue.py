@@ -10,10 +10,6 @@ corresponding to arbitrary sensitivity factors for price and yield.
 
 class Revenue(object):
     """
-    Parses a text file in the directory containing this class
-    named e.g. "2023_revenue_data.txt", which has all required
-    budgeting revenue data for a farm for a given crop year.
-
     Computes total estimated revenue for the farm crop year
     corresponding to arbitrary sensitivity factors for price and yield.
 
@@ -31,16 +27,25 @@ class Revenue(object):
         key/value pairs from the text file and make object attributes from it.
         """
         self.crop_year = crop_year
-        for k, v in self.load_for_crop_year():
+        for k, v in self._load_required_data():
             setattr(self, k, float(v) if '.' in v else int(v))
 
-    def load_for_crop_year(self):
+    def _load_required_data(self):
         """
         Load individual revenue items from data file
-        ignoring lines that begin with '#' and blank lines
         return a list with all the key/value pairs
         """
-        with open(f'{self.crop_year}_revenue_data.txt') as f:
+        farm_data = self._load_textfile(f'{self.crop_year}_farm_data.txt')
+        cost_data = self._load_textfile(f'{self.crop_year}_revenue_data.txt')
+
+        return (farm_data + cost_data)
+
+    def _load_textfile(self, filename):
+        """
+        Load a textfile with the given name into a list of key/value pairs,
+        ignoring blank lines and comment lines that begin with '#'
+        """
+        with open(filename) as f:
             contents = f.read()
 
         lines = filter(lambda line: line and line[0] != '#',

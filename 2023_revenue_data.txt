@@ -1,21 +1,11 @@
+# 2023 crop year data required by the revenue component
+
 # FILE FORMAT INFORMATION
-# Each line in this file should be either blank, a comment line 
+# Each line in this file should be either blank, a comment line
 # denoted by the '#' as the first character, or a key value pair.
 # A key cannot contain spaces, and underscores are recommended
-# A value should represent an integer or floating point value 
+# A value should represent an integer or floating point value
 # Units of values should be specified in comments if ambiguous
-
-acres_corn                  4225.5
-# Note: acres_soy includes wheat/dc soy acres
-acres_soy                   3727.1
-acres_wheat_dc_soy           407.6
-
-# yields in bu/acre
-proj_yield_farm_corn         223.4
-proj_yield_farm_full_soy      72.8
-proj_yield_farm_dc_soy        49.3 
-# wheat yield is not used by the application, but provided for reference
-proj_yield_farm_wheat         88.4
 
 contract_bu_corn          600000
 contract_bu_soy           260000
@@ -23,8 +13,8 @@ contract_bu_soy           260000
 # deducts and shrink are percents
 est_shrink_corn                0.75
 est_shrink_soy                 0.75
-est_deduct_corn                0.5 
-est_deduct_soy                 0.5 
+est_deduct_corn                0.5
+est_deduct_soy                 0.5
 
 # revenue, contract prices, basis, pmts in dollars
 

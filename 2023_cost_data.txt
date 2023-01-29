@@ -1,14 +1,11 @@
-acres_corn                              4225.5
-# Note: acres_soy includes wheat/dc soy acres
-acres_soy                               3727.1
-acres_wheat_dc_soy                       407.6
+# 2023 crop year data required by the cost component
 
-# yields in bu/acre
-proj_yield_farm_corn                     223.4
-proj_yield_farm_full_soy                  72.8
-proj_yield_farm_dc_soy                    49.3 
-# wheat yield is not used by the application, but provided for reference
-proj_yield_farm_wheat                     88.4
+# FILE FORMAT INFORMATION
+# Each line in this file should be either blank, a comment line
+# denoted by the '#' as the first character, or a key value pair.
+# A key cannot contain spaces, and underscores are recommended
+# A value should represent an integer or floating point value
+# Units of values should be specified in comments if ambiguous
 
 # VARIABLE COSTS (EXLUDING GOV CROP INS)
 # --------------------------------------
@@ -18,7 +15,7 @@ seed_plus_treatment_soy               297328
 
 # FERTILIZER
 # yield-dependent replacement fertilizer
-dap_corn                              345946 
+dap_corn                              345946
 dap_soy                               187392
 repl_potash_corn                      132157
 repl_potash_soy                       170140
@@ -54,16 +51,8 @@ fuel_alloc_soy                             0.45
 est_haul_alloc                             0.85
 
 # current fuel prices dollars per gallon
-clear_diesel_price                         5.12 
+clear_diesel_price                         5.12
 dyed_diesel_price                          4.36
-
-# PAYROLL
-est_payroll                           645645
-payroll_alloc_corn                         0.55 
-payroll_alloc_soy                          0.45 
-
-# overtime as percent of payroll
-payroll_pct_ot                             0.1
 
 # GAS / ELECTRIC (drying, aerating, distributing grain) yield-dependent
 gas_electric_corn                      61674
@@ -86,8 +75,16 @@ wheat_hauling_base                      5038
 # OVERHEAD
 # --------
 
+# PAYROLL
+est_payroll                           645645
+payroll_alloc_corn                         0.55
+payroll_alloc_soy                          0.45
+
+# overtime as percent of payroll
+payroll_pct_ot                             0.1
+
 replacement_capital_corn              583104
-replacement_capital_soy               437298 
+replacement_capital_soy               437298
 building_equip_repairs_corn           159401
 building_equip_repairs_soy            140599
 shop_tools_supplies_parts_corn        122207
@@ -102,6 +99,3 @@ other_operating_expense_corn           63760
 other_operating_expense_soy            56240
 total_land_expenses_corn              443606
 total_land_expenses_soy               391283
-
-
-
