@@ -31,13 +31,13 @@ est_basis_corn                 0.35
 est_basis_soy                  0.35
 
 # government program payments intentionally excluded
-ppp_loan_forgive_corn		       0
+ppp_loan_forgive_corn          0
 ppp_loan_forgive_soy           0
-mfp_cfap_corn						       0
-mfp_cfap_soy						       0
+mfp_cfap_corn                  0
+mfp_cfap_soy                   0
 
 rental_revenue_corn        85952
 rental_revenue_soy         75814
 
 other_revenue_corn         16231
-other_revenue_soy	         14316
+other_revenue_soy          14316

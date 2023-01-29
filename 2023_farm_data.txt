@@ -8,6 +8,7 @@
 # Units of values should be specified in comments if ambiguous
 
 acres_corn                              4225.5
+
 # Note: acres_soy includes wheat/dc soy acres
 acres_soy                               3727.1
 acres_wheat_dc_soy                       407.6
@@ -16,5 +17,6 @@ acres_wheat_dc_soy                       407.6
 proj_yield_farm_corn                     223.4
 proj_yield_farm_full_soy                  72.8
 proj_yield_farm_dc_soy                    49.3
+
 # wheat yield is not used by the application, but provided for reference
 proj_yield_farm_wheat                     88.4

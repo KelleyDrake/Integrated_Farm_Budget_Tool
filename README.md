@@ -9,7 +9,7 @@ At this point only the revenue and cost components are complete and tested.  The
 ## Prerequisites 
 
 - [Python 3.10 or above](https://www.python.org/)
-- [pip (Python package manager](https://pip.pypa.io/en/stable/installation/)
+- [pip (Python package manager)](https://pip.pypa.io/en/stable/installation/)
 - [git version control](https://git-scm.com/downloads)
 - [tabulate](https://pypi.org/project/tabulate/) `pip install tabulate`
 
@@ -21,11 +21,12 @@ At this point only the revenue and cost components are complete and tested.  The
 
 In Python console or ipython console:
 
-To see the revenue sensitivity table for 2023:
+To see the revenue and cost sensitivity tables for 2023:
 
 ```
-from sensitivity import sens_revenue
+from sensitivity import sens_revenue, sens_cost
 sens_revenue(2023)
+sens_cost(2023)
 ```
 
 To compute a single cell of the table (or test arbitrary factors): 

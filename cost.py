@@ -256,7 +256,7 @@ class Cost(object):
 
         return round(
             self.est_payroll * getattr(self, f'payroll_alloc_{crop}') *
-            (1 + self.payroll_pct_ot *
+            (1 + self.payroll_frac_ot *
              (self.proj_yield_farm_crop(crop) * yield_factor /
               getattr(self, f'yield_2018_{crop}') - 1)))
 

@@ -27,8 +27,8 @@ anhydrous_corn                        661430
 
 # total fertilizer costs (sum of above fertilizer items + micronutrients + lime)
 # based on current yield estimate
-cur_est_fertiilizer_cost_corn           1181473
-cur_est_fertiilizer_cost_soy             394525
+cur_est_fertiilizer_cost_corn        1181473
+cur_est_fertiilizer_cost_soy          394525
 
 # PESTICIDES
 chemicals_corn                        320882
@@ -80,8 +80,8 @@ est_payroll                           645645
 payroll_alloc_corn                         0.55
 payroll_alloc_soy                          0.45
 
-# overtime as percent of payroll
-payroll_pct_ot                             0.1
+# overtime as fraction of payroll
+payroll_frac_ot                            0.1
 
 replacement_capital_corn              583104
 replacement_capital_soy               437298
