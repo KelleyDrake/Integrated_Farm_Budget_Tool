@@ -5,31 +5,21 @@ Module sensitivity
 """
 from tabulate import tabulate
 from revenue import Revenue
+from cost import Cost
+
+yield_pcts = "40 55 70 80 90 95 100 105".split()
+price_pcts = "60 75 90 95 100 105 110 125 140 165 180".split()
+
+yield_pct_labels = [p+'%' for p in yield_pcts]
+price_pct_labels = [p+'%' for p in price_pcts]
+
+yield_pcts = [int(p)/100 for p in yield_pcts]
+price_pcts = [int(p)/100 for p in price_pcts]
+
+ny = len(yield_pcts)
 
 
-def sens_revenue(crop_year):
-    """
-    Display a sensitivity table for the specified crop year
-    for straightforward comparison with the revenue table
-    in 'benchmarks.xls!KeyInputs'
-    """
-    yield_pcts = "40 55 70 80 90 95 100 105".split()
-    price_pcts = "60 75 90 95 100 105 110 125 140 165 180".split()
-
-    yield_pct_labels = [p+'%' for p in yield_pcts]
-    price_pct_labels = [p+'%' for p in price_pcts]
-
-    yield_pcts = [int(p)/100 for p in yield_pcts]
-    price_pcts = [int(p)/100 for p in price_pcts]
-
-    r = Revenue(2023)
-
-    ny = len(yield_pcts)
-
-    # Compute sensitivity data (8 yield values, 11 price values)
-    data = [['']*3 + [round(r.total_revenue(p, y)/1000) for y in yield_pcts]
-            for p in price_pcts]
-
+def setup_table(data, r, title):
     # add 3 empty rows for headers
     table = [['']*(3+ny)] + [['']*(3+ny)] + [['']*(3+ny)] + data
 
@@ -54,5 +44,40 @@ def sens_revenue(crop_year):
         table[0][3+i] = round(p * r.proj_yield_farm_corn, 1)
         table[1][3+i] = round(p * r.projected_yield_soy(), 1)
         table[2][3+i] = yield_pct_labels[i]
+
+    return table
+
+
+def sens_revenue(crop_year=2023):
+    """
+    Display a sensitivity table for the specified crop year
+    for straightforward comparison with the revenue table
+    in 'benchmarks.xls!KeyInputs'
+    """
+    r = Revenue(crop_year)
+
+    # Compute sensitivity data (8 yield values, 11 price values)
+    data = [['']*3 + [round(r.total_revenue(p, y)/1000) for y in yield_pcts]
+            for p in price_pcts]
+
+    table = setup_table(data, r, 'REVENUE')
+
+    print(tabulate(table, tablefmt="simple_grid"))
+
+
+def sens_cost(crop_year=2023):
+    """
+    Display a sensitivity table for the specified crop year
+    for straightforward comparison with the cost table
+    in 'benchmarks.xls!KeyInputs'
+    """
+    r = Revenue(crop_year)
+    c = Cost(crop_year)
+
+    # Compute sensitivity data (8 yield values, 11 price values)
+    data = [['']*3 + [round(c.total_cost(y)/1000) for y in yield_pcts]
+            for p in price_pcts]
+
+    table = setup_table(data, r, 'COST')
 
     print(tabulate(table, tablefmt="simple_grid"))
