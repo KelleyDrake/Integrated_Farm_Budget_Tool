@@ -1,10 +1,10 @@
 # crop_insurance_tool
 
-A tool for midwest grain farmers to help evaluate farm payment and crop insurance decisions in terms of their overall cash flow.
+A tool for midwest grain farmers to help evaluate crop allocation, farm payment and crop insurance decisions to optimize overall cash flow.
 
 The current implementation is just beginning development with a goal of verifying this Python codebase against Kelley's benchmarking.xlsx Excel workbook.  Once the logic has been validated, the plan is to build a publicly available web application, possibly in Django.  Having registered to use this application, a farmer could enter/upload his or her farm-specific data and select options for farm plan and crop insurance to maximize cash flow while minimizing risk.
 
-At this point only the revenue component is complete (now tested).  The other four components (cost, gov_pmt, net_indemnity and cash_flow will be built and tested shortly.
+At this point only the revenue and cost components are complete and tested.  The other three components: gov_pmt, net_indemnity and cash_flow will be built and tested shortly.
 
 ## Prerequisites 
 
