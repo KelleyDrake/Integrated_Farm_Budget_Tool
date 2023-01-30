@@ -16,9 +16,9 @@ class Revenue(object):
     Sample usage in a python or ipython console:
       from revenue import Revenue
       r = Revenue(2023)
-      print(r.total_revenue() # price_factor and yield_factor default to 1
+      print(r.total_revenue() # pf and yf default to 1
       print(r.total_revenue(.9, 1.1) # specifies both price and yield factors
-      print(r.total_revenue(yield_factor=1.2) # uses default for price_factor
+      print(r.total_revenue(yf=1.2) # uses default for pf
     """
 
     def __init__(self, crop_year):
@@ -53,13 +53,13 @@ class Revenue(object):
 
         return [line.strip().split() for line in lines]
 
-    def deliverable_bu_corn(self, yield_factor=1):
+    def deliverable_bu_corn(self, yf=1):
         """
         Estimated corn bushels with shrink and yield factor applied
         """
         ret = (self.acres_corn *
                self.proj_yield_farm_corn *
-               (1 - self.est_shrink_corn/100.) * yield_factor)
+               (1 - self.est_shrink_corn/100.) * yf)
         # print('deliverable_bu_corn', ret)
         return ret
 
@@ -82,40 +82,40 @@ class Revenue(object):
         """
         return self.estimated_soy_bushels() / self.acres_soy
 
-    def deliverable_bu_soy(self, yield_factor=1):
+    def deliverable_bu_soy(self, yf=1):
         """
         Estimated soy bushels with shrink and yield factor applied
         """
         ret = (self.estimated_soy_bushels() *
-               (1 - self.est_shrink_soy/100.) * yield_factor)
+               (1 - self.est_shrink_soy/100.) * yf)
         # print('deliverable_bu_soy', ret)
         return ret
 
-    def revenue_uncontracted_crop(self, crop, price_factor=1, yield_factor=1):
+    def revenue_uncontracted_crop(self, crop, pf=1, yf=1):
         """
         Estimated revenue of uncontracted corn or soy for specified
-        price_factor and yield_factor rounded to whole dollars
+        pf and yf rounded to whole dollars
         """
         if crop not in ['corn', 'soy']:
             raise ValueError("crop must be 'corn' or 'soy'")
 
         ret = round(
-            ((self.deliverable_bu_corn(yield_factor) if crop == 'corn' else
-              self.deliverable_bu_soy(yield_factor)) -
+            ((self.deliverable_bu_corn(yf) if crop == 'corn' else
+              self.deliverable_bu_soy(yf)) -
              getattr(self, f'contract_bu_{crop}')) *
-            (getattr(self, f'fall_futures_price_{crop}') * price_factor +
+            (getattr(self, f'fall_futures_price_{crop}') * pf +
              getattr(self, f'est_basis_{crop}')) *
             (1 - getattr(self, f'est_deduct_{crop}')/100.))
         # print("revenue_uncontracted_crop", crop, ret)
         return ret
 
-    def revenue_uncontracted(self, price_factor=1, yield_factor=1):
+    def revenue_uncontracted(self, pf=1, yf=1):
         """
         Estimated revenue of uncontracted grain for specified
-        price_factor and yield_factor in whole dollars
+        pf and yf in whole dollars
         """
         ret = sum(
-            [self.revenue_uncontracted_crop(crop, price_factor, yield_factor)
+            [self.revenue_uncontracted_crop(crop, pf, yf)
              for crop in ['corn', 'soy']])
         # print('revenue_uncontracted', ret)
         return ret
@@ -134,7 +134,7 @@ class Revenue(object):
         # print('revenue_contracted_crop', crop, ret)
         return ret
 
-    def revenue_contracted(self, price_factor=1):
+    def revenue_contracted(self, pf=1):
         """
         Expected revenue from contracted grain in whole dollars
         """
@@ -143,7 +143,7 @@ class Revenue(object):
         # print('revenue_contracted', ret)
         return ret
 
-    def total_revenue_crop(self, crop, price_factor=1, yield_factor=1):
+    def total_revenue_crop(self, crop, pf=1, yf=1):
         """
         Convenience method providing total revenue for a given
         crop based on price and yield factors
@@ -153,16 +153,16 @@ class Revenue(object):
         ret = (self.revenue_wheat if crop == 'wheat' else
                self.revenue_contracted_crop(crop) +
                self.revenue_uncontracted_crop(
-                   crop, price_factor, yield_factor))
+                   crop, pf, yf))
         # print('total_revenue_crop', crop, ret)
         return ret
 
-    def total_revenue_grain(self, price_factor=1, yield_factor=1):
+    def total_revenue_grain(self, pf=1, yf=1):
         """
         Convenience method providing total grain revenue for the crop year
         based on price and yield factors
         """
-        return sum([self.total_revenue_crop(crop, price_factor, yield_factor)
+        return sum([self.total_revenue_crop(crop, pf, yf)
                     for crop in ['corn', 'soy', 'wheat']])
 
     def total_revenue_other(self):
@@ -177,11 +177,11 @@ class Revenue(object):
         # print('total_revenue_other', ret)
         return ret
 
-    def total_revenue(self, price_factor=1, yield_factor=1):
+    def total_revenue(self, pf=1, yf=1):
         """
         Total revenue reflecting current estimates and price/yield factors
         """
         return sum([self.revenue_wheat,
-                    self.revenue_uncontracted(price_factor, yield_factor),
+                    self.revenue_uncontracted(pf, yf),
                     self.revenue_contracted(),
                     self.total_revenue_other()])

@@ -1,11 +1,13 @@
 """
 Module sensitivity
 
-
+Generate a table of values from two sensitivity parameters
 """
 from tabulate import tabulate
-from revenue import Revenue
+
 from cost import Cost
+from gov_pmt import GovPmt
+from revenue import Revenue
 
 yield_pcts = "40 55 70 80 90 95 100 105".split()
 price_pcts = "60 75 90 95 100 105 110 125 140 165 180".split()
@@ -56,7 +58,6 @@ def sens_revenue(crop_year=2023):
     """
     r = Revenue(crop_year)
 
-    # Compute sensitivity data (8 yield values, 11 price values)
     data = [['']*3 + [round(r.total_revenue(p, y)/1000) for y in yield_pcts]
             for p in price_pcts]
 
@@ -74,10 +75,26 @@ def sens_cost(crop_year=2023):
     r = Revenue(crop_year)
     c = Cost(crop_year)
 
-    # Compute sensitivity data (8 yield values, 11 price values)
     data = [['']*3 + [round(c.total_cost(y)/1000) for y in yield_pcts]
             for p in price_pcts]
 
     table = setup_table(data, r, 'COST')
+
+    print(tabulate(table, tablefmt="simple_grid"))
+
+
+def sens_gov_pmt(crop_year=2023):
+    """
+    Display a sensitivity table for the specified crop year
+    for straightforward comparison with the cost table
+    in 'benchmarks.xls!KeyInputs'
+    """
+    r = Revenue(crop_year)
+    g = GovPmt(crop_year)
+
+    data = [['']*3 + [round(g.total_gov_pmt(p, y)/1000) for y in yield_pcts]
+            for p in price_pcts]
+
+    table = setup_table(data, r, 'GOV_PMT')
 
     print(tabulate(table, tablefmt="simple_grid"))
