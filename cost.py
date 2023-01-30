@@ -51,6 +51,13 @@ class Cost(object):
 
         return [line.strip().split() for line in lines]
 
+    def c(self, s, crop):
+        """
+        Helper to simplify syntax for reading crop-dependent attributes
+        imported from textfile
+        """
+        return getattr(self, f'{s}_{crop}')
+
     def proj_yield_farm_crop(self, crop):
         """
         Helper method providing projected yields for all crops
@@ -82,8 +89,8 @@ class Cost(object):
             raise ValueError("crop must be 'corn' or 'soy'")
 
         return round(
-            (getattr(self, f'dap_{crop}') +
-             getattr(self, f'repl_potash_{crop}')) * yf)
+            (self.c('dap', crop) +
+             self.c('repl_potash', crop)) * yf)
 
     def yield_dep_repl_fert(self, yf=1):
         """
@@ -100,7 +107,7 @@ class Cost(object):
             raise ValueError("crop must be 'corn' or 'soy'")
 
         return round(
-            getattr(self, f'cur_est_fertiilizer_cost_{crop}') -
+            self.c('cur_est_fertiilizer_cost', crop) -
             self.yield_dep_repl_fert_crop(crop, yf=1))
 
     def yield_indep_repl_fert(self):
@@ -151,8 +158,8 @@ class Cost(object):
             raise ValueError("crop must be 'corn' or 'soy'")
 
         return (
-            self.clear_gpa_2018 * getattr(self, f'acres_{crop}') *
-            self.clear_diesel_price * getattr(self, f'fuel_alloc_{crop}'))
+            self.clear_gpa_2018 * self.c('acres', crop) *
+            self.clear_diesel_price * self.c('fuel_alloc', crop))
 
     def clear_diesel_cost_crop(self, crop, yf=1):
         """
@@ -166,7 +173,7 @@ class Cost(object):
             self.clear_diesel_base_cost_crop(crop) *
             ((1 - self.est_haul_alloc) +
              self.est_haul_alloc * self.proj_yield_farm_crop(crop) /
-             getattr(self, f'yield_2018_{crop}') * yf))
+             self.c('yield_2018', crop) * yf))
 
     def dyed_diesel_cost_crop(self, crop):
         """
@@ -176,8 +183,8 @@ class Cost(object):
             raise ValueError("crop must be 'corn' or 'soy'")
 
         return round(
-            self.dyed_gpa_2018 * getattr(self, f'acres_{crop}') *
-            self.dyed_diesel_price * getattr(self, f'fuel_alloc_{crop}'))
+            self.dyed_gpa_2018 * self.c('acres', crop) *
+            self.dyed_diesel_price * self.c('fuel_alloc', crop))
 
     def diesel_cost_crop(self, crop, yf=1):
         """
@@ -205,7 +212,7 @@ class Cost(object):
         if crop not in ['corn', 'soy']:
             raise ValueError("crop must be 'corn' or 'soy'")
 
-        return round(getattr(self, f'gas_electric_{crop}') * yf)
+        return round(self.c('gas_electric', crop) * yf)
 
     def gas_electric_cost(self, yf=1):
         """
@@ -226,10 +233,10 @@ class Cost(object):
         return (
             self.incremental_wheat_cost(yf) if crop == 'wheat'
             else (
-                getattr(self, f'seed_plus_treatment_{crop}') +
-                getattr(self, f'chemicals_{crop}') +
-                getattr(self, f'wind_peril_premium_{crop}') +
-                getattr(self, f'minus_wind_peril_indemnity_{crop}') +
+                self.c('seed_plus_treatment', crop) +
+                self.c('chemicals', crop) +
+                self.c('wind_peril_premium', crop) +
+                self.c('minus_wind_peril_indemnity', crop) +
                 self.total_fert_crop(crop, yf) +
                 self.diesel_cost_crop(crop, yf) +
                 self.gas_electric_cost_crop(crop, yf)))
@@ -255,10 +262,10 @@ class Cost(object):
             raise ValueError("crop must be 'corn' or 'soy'")
 
         return round(
-            self.est_payroll * getattr(self, f'payroll_alloc_{crop}') *
+            self.est_payroll * self.c('payroll_alloc', crop) *
             (1 + self.payroll_frac_ot *
              (self.proj_yield_farm_crop(crop) * yf /
-              getattr(self, f'yield_2018_{crop}') - 1)))
+              self.c('yield_2018', crop) - 1)))
 
     def total_payroll(self, yf=1):
         """
@@ -278,14 +285,14 @@ class Cost(object):
 
         return (
             self.payroll_crop(crop, yf) +
-            getattr(self, f'replacement_capital_{crop}') +
-            getattr(self, f'building_equip_repairs_{crop}') +
-            getattr(self, f'shop_tools_supplies_parts_{crop}') +
-            getattr(self, f'business_insurance_{crop}') +
-            getattr(self, f'other_utilities_{crop}') +
-            getattr(self, f'professional_fees_{crop}') +
-            getattr(self, f'other_operating_expense_{crop}') +
-            getattr(self, f'total_land_expenses_{crop}'))
+            self.c('replacement_capital', crop) +
+            self.c('building_equip_repairs', crop) +
+            self.c('shop_tools_supplies_parts', crop) +
+            self.c('business_insurance', crop) +
+            self.c('other_utilities', crop) +
+            self.c('professional_fees', crop) +
+            self.c('other_operating_expense', crop) +
+            self.c('total_land_expenses', crop))
 
     def total_overhead(self, yf=1):
         """

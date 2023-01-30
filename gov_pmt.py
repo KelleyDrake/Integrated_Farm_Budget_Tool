@@ -56,20 +56,27 @@ class GovPmt(object):
 
         return [line.strip().split() for line in lines]
 
+    def c(self, s, crop):
+        """
+        Helper to simplify syntax for reading crop-dependent attributes
+        imported from textfile
+        """
+        return getattr(self, f'{s}_{crop}')
+
     def assumed_mya_price(self, crop, pf=1):
         """
         Marketing Year Avg Price with price factor (Y38:AA38 -> AR16:AT16)
         """
 
-        return (getattr(self, f'fut_price_{crop}') * pf -
-                getattr(self, f'decrement_from_futures_to_mya_{crop}'))
+        return (self.c('fut_price', crop) * pf -
+                self.c('decrement_from_futures_to_mya', crop))
 
     def net_payment_acres(self, crop):
         """
         Net Payment Acres (85 percent of base) (Y10:AA10)
         """
         return (self.base_to_net_pmt_frac *
-                getattr(self, f'farm_base_acres_{crop}'))
+                self.c('farm_base_acres', crop))
 
     # PLC
     # ---
@@ -78,7 +85,7 @@ class GovPmt(object):
         The effective price (Y18:AA18)
         The maximum of the national MYA price and the loan rate
         """
-        return max(getattr(self, f'natl_loan_rate_{crop}'),
+        return max(self.c('natl_loan_rate', crop),
                    self.assumed_mya_price(crop, pf))
 
     def effective_ref_rate(self, crop):
@@ -88,10 +95,10 @@ class GovPmt(object):
             min(statutory reference rate with new escalator,
                 statutory reference rate (farm bill) * rate_cap_factor))
         """
-        return max(getattr(self, f'stat_ref_rate_farm_bill_{crop}'),
-                   min(getattr(self, f'stat_ref_rate_new_escal_{crop}'),
+        return max(self.c('stat_ref_rate_farm_bill', crop),
+                   min(self.c('stat_ref_rate_new_escal', crop),
                        self.rate_cap_factor_new_escal *
-                       getattr(self, f'stat_ref_rate_farm_bill_{crop}')))
+                       self.c('stat_ref_rate_farm_bill', crop)))
 
     def plc_payment_rate1(self, crop, pf=1):
         """
@@ -103,8 +110,8 @@ class GovPmt(object):
         """
         The maximum PLC payment rate (Y20:AA20)
         """
-        return (getattr(self, f'stat_ref_rate_farm_bill_{crop}') -
-                getattr(self, f'natl_loan_rate_{crop}'))
+        return (self.c('stat_ref_rate_farm_bill', crop) -
+                self.c('natl_loan_rate', crop))
 
     def plc_payment_rate(self, crop, pf=1):
         """
@@ -117,8 +124,8 @@ class GovPmt(object):
         """
         Farm PLC yield (bushels/base acres) [156 Farm Records](L56, O56, R56)
         """
-        return (getattr(self, f'farm_plc_bu_{crop}') /
-                getattr(self, f'farm_base_acres_{crop}'))
+        return (self.c('farm_plc_bu', crop) /
+                self.c('farm_base_acres', crop))
 
     def plc_pmt_pre_sequest(self, crop, pf=1):
         """
@@ -133,8 +140,8 @@ class GovPmt(object):
         """
         Arc Benchmark County Revenue (Y35:AA35)
         """
-        return (getattr(self, f'arc_price_{crop}') *
-                getattr(self, f'arc_yield_{crop}'))
+        return (self.c('arc_price', crop) *
+                self.c('arc_yield', crop))
 
     def arc_capped_bmk_revenue(self, crop):
         """
@@ -153,14 +160,14 @@ class GovPmt(object):
         """
         County actual/est yield (RMA) (Y40:AA40) -> (AR25:AT25)
         """
-        return getattr(self, f'est_county_yield_{crop}') * yf
+        return self.c('est_county_yield', crop) * yf
 
     def actual_crop_revenue(self, crop, pf=1, yf=1):
         """
         Actual crop revenue (Y41:AA41)
         """
         return (max(self.assumed_mya_price(crop, pf),
-                    getattr(self, f'natl_loan_rate_{crop}')) *
+                    self.c('natl_loan_rate', crop)) *
                 self.county_rma_yield(crop, yf))
 
     def revenue_shortfall(self, crop, pf=1, yf=1):
@@ -190,7 +197,7 @@ class GovPmt(object):
         Government program pre-sequestration payment for crop (Y56:AA56)
         """
         return (self.arc_pmt_pre_sequest(crop, pf, yf)
-                if getattr(self, f'program_{crop}') == GovPmt.ARC_CO else
+                if self.c('program', crop) == GovPmt.ARC_CO else
                 self.plc_pmt_pre_sequest(crop, pf))
 
     def prog_pmt_pre_sequest(self, pf=1, yf=1):
