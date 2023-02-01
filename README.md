@@ -1,8 +1,10 @@
-# crop_insurance_tool
+# Integrated_Farm_Budget_Tool
 
-A tool for midwest grain farmers to help evaluate crop allocation, farm payment and crop insurance decisions to optimize overall cash flow.
+An integrated tool allowing midwest grain farmers to budget farm profitability and readily visualize outcomes sensitized to price and yield.
 
-The current implementation is just beginning development with a goal of verifying this Python codebase against Kelley's benchmarking.xlsx Excel workbook.  Once the logic has been validated, the plan is to build a publicly available web application, possibly in Django.  Having registered to use this application, a farmer could enter/upload his or her farm-specific data and select options for farm plan and crop insurance to maximize cash flow while minimizing risk.
+Based on farm specific inputs, this tool will assist an operator in 1) evaluating crop profitability and acerage allocation, 2) budgeting revenues reflective of already marketed and unmarketed grain, 3) assessing the implications of crop insurance alternatives, and 4) assessing the implications of title selection.  Farm operators can easily change any key inputs or assumptions to quickly test alternatives and visualize the holistic impact on their farm's budgeted profitability.   Furthermore, all the drivers of revenue, costs, crop insurance and title are sensitized to actual harvest price and yield.  Therefore an operator can readily visualize not only the implications of decisions on a static budget, but also the range of potential outomes of farm profitability dependant upon a range of possible actual harvest prices and yields.
+
+The current implementation is just beginning development with a goal of verifying this Python codebase against Kelley's benchmarking.xlsx Excel workbook.  Once the logic has been validated, the plan is to build a publicly available web application, possibly in Django.  Having registered to use this application, an operator could enter/upload farm-specific data and then use the tool to evaluate various alternatives across various price and yield scenarios to both maximize profitability while also minimizing risks.
 
 At this point only the revenue, cost and gov_pmt components are complete and tested.  The other two components: crop_ins and cash_flow will be built and tested shortly.
 
@@ -15,7 +17,7 @@ At this point only the revenue, cost and gov_pmt components are complete and tes
 
 ## Installation
 
-`git clone https://github.com/ddrake/crop_insurance_tool.git`
+`git clone https://github.com/ddrake/Integrated_Farm_Budget_Tool.git`
 
 ## Usage
 
@@ -44,5 +46,6 @@ r.total_revenue(pf=.95, yf=1.05)
 - Kelley Drake
 - Dow Drake
 - Bennett Drake
-- Bennett's colleagues (to be named soon)
+- Varun Sadasivam
+- Danny Huang
 
