@@ -16,8 +16,8 @@ class Cost(object):
     Sample usage in a python or ipython console:
       from cost import Cost
       c = Cost(2023)
-      print(c.total_cost()    # yf defaults to 1
-      print(c.total_cost(1.1) # specifies both price and yield factors
+      print(c.total_cost()    # yield factor defaults to 1
+      print(c.total_cost(yf=.7) # specifies yield factor
     """
     def __init__(self, crop_year):
         """
@@ -46,10 +46,10 @@ class Cost(object):
         with open(filename) as f:
             contents = f.read()
 
-        lines = filter(lambda line: line and line[0] != '#',
-                       contents.strip().split('\n'))
-
-        return [line.strip().split() for line in lines]
+        lines = contents.strip().split('\n')
+        lines = filter(lambda line: len(line) > 0 and line[0] != '#',
+                       [line.strip() for line in lines])
+        return [line.split() for line in lines]
 
     def c(self, s, crop):
         """

@@ -48,10 +48,10 @@ class Revenue(object):
         with open(filename) as f:
             contents = f.read()
 
-        lines = filter(lambda line: line and line[0] != '#',
-                       contents.strip().split('\n'))
-
-        return [line.strip().split() for line in lines]
+        lines = contents.strip().split('\n')
+        lines = filter(lambda line: len(line) > 0 and line[0] != '#',
+                       [line.strip() for line in lines])
+        return [line.split() for line in lines]
 
     def c(self, s, crop):
         """
